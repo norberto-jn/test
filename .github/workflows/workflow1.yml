@@ -13,9 +13,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const issueNumber = context.payload.pull_request.number;
             const comment = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.';
-            await github.issues.createComment({
-              ...context.repo,
-              issue_number: context.payload.pull_request.number,
+            
+            // Use github.rest para acessar a API
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
               body: comment,
             });
