@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened]
 
+permissions:
+  issues: write
+  pull-requests: write
+
 jobs:
   comment:
     runs-on: ubuntu-latest
@@ -13,12 +17,23 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const comment = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.';
-            const { context } = require('@actions/github');
-            const issue_number = context.payload.pull_request.number;
+            const issueNumber = context.payload.pull_request.number;
+            const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\n\nArquivos alterados:\n';
+            
+            // Obter a lista de arquivos alterados
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: issueNumber,
+            });
 
-            await github.issues.createComment({
-              ...context.repo,
-              issue_number,
+            const fileNames = files.map(file => file.filename).join('\n');
+
+            const comment = commentBase + fileNames;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
               body: comment,
             });
