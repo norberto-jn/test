@@ -6,7 +6,7 @@ on:
 
 permissions:
   issues: write
-  pull_requests: write
+  pull-requests: write  # Use hífen em vez de sublinhado
 
 jobs:
   comment:
