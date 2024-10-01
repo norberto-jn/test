@@ -6,7 +6,7 @@ on:
 
 permissions:
   issues: write
-  pull-requests: write  # Use hífen em vez de sublinhado
+  pull-requests: write
 
 jobs:
   comment:
@@ -18,7 +18,18 @@ jobs:
         with:
           script: |
             const issueNumber = context.payload.pull_request.number;
-            const comment = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.';
+            const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\n\nArquivos alterados:\n';
+            
+            // Obter a lista de arquivos alterados
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: issueNumber,
+            });
+
+            const fileNames = files.map(file => file.filename).join('\n');
+
+            const comment = commentBase + fileNames;
             
             await github.rest.issues.createComment({
               owner: context.repo.owner,
