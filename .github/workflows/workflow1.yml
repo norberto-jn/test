@@ -13,8 +13,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const { github, context } = require('@actions/github');
             const comment = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.';
-            const { context } = require('@actions/github');
             const issue_number = context.payload.pull_request.number;
 
             await github.issues.createComment({
