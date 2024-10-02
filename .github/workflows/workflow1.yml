@@ -26,10 +26,20 @@ jobs:
               repo: context.repo.repo,
               pull_number: issueNumber,
             });
-
-            const fileNames = files.map(file => file.filename).join('\n');
-
-            const comment = commentBase + fileNames;
+            
+            let comment = commentBase;
+            
+            if (!files || files.length === 0) {
+              comment += 'Nenhum arquivo alterado.\n';
+            } else {
+              for (const file of files) {
+                // Verifica se o patch existe
+                const filePatch = file.patch || 'Sem alterações';
+                
+                comment += `**${file.filename}**\n`;
+                comment += `\`\`\`\n${filePatch}\n\`\`\`\n\n`;
+              }
+            }
             
             await github.rest.issues.createComment({
               owner: context.repo.owner,
