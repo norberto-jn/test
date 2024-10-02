@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Comment on PR
-        uses: docker://node:14  # Use a imagem do Node.js
+        uses: docker://node:14
         with:
           args: |
             sh -c "npm install code-reviewer && \
