@@ -29,21 +29,26 @@ jobs:
             
             let comment = commentBase;
             
-            if (files.length === 0) {
+            if (!files || files.length === 0) {
               comment += 'Nenhum arquivo alterado.\n';
             } else {
-              for (const file of files) {
-                // Obter o patch do arquivo
-                const { data: fileData } = await github.rest.pulls.get({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: issueNumber,
-                });
-
-                const filePatch = fileData.files.find(f => f.filename === file.filename)?.patch || 'Sem alterações';
-
-                comment += `**${file.filename}**\n`;
-                comment += `\`\`\`\n${filePatch}\n\`\`\`\n\n`;
+              // Obter o patch da Pull Request
+              const { data: pullRequestData } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: issueNumber,
+              });
+              
+              // Verifique se pullRequestData.files está definido
+              if (pullRequestData.files) {
+                for (const file of pullRequestData.files) {
+                  const filePatch = file.patch || 'Sem alterações';
+                  
+                  comment += `**${file.filename}**\n`;
+                  comment += `\`\`\`\n${filePatch}\n\`\`\`\n\n`;
+                }
+              } else {
+                comment += 'Não foi possível obter as alterações dos arquivos.\n';
               }
             }
             
