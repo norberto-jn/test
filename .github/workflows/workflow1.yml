@@ -21,45 +21,26 @@ jobs:
         with:
           args: |
             sh -c "npm install code-reviewer && \
-            node -e \"
-              const { context } = require('@actions/github');
-              const { getOctokit } = require('@actions/github');
-              const generateReviewText = require('code-reviewer');
-
-              const issueNumber = context.payload.pull_request.number;
-              const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\\n\\nArquivos alterados:\\n';
-
-              const octokit = getOctokit(process.env.GITHUB_TOKEN);
-
-              octokit.pulls.listFiles({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: issueNumber,
-              }).then(({ data: files }) => {
-                let comment = commentBase;
-
-                if (!files || files.length === 0) {
-                  comment += 'Nenhum arquivo alterado.\\n';
-                } else {
-                  files.forEach(file => {
-                    const filePatch = file.patch || 'Sem alterações';
-                    comment += `**${file.filename}**\\n`;
-                    comment += `\\`\`\\n${filePatch}\\n\\`\`\\n\\n`;
-                  });
-                }
-
-                const reviewComment = generateReviewText(comment);
-
-                return octokit.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  body: reviewComment,
-                });
-              }).catch(error => {
-                console.error(error);
-                process.exit(1);
-              });
-            \""
+            node -e \"const { context } = require('@actions/github'); \
+            const { getOctokit } = require('@actions/github'); \
+            const generateReviewText = require('code-reviewer'); \
+            const issueNumber = context.payload.pull_request.number; \
+            const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\\n\\nArquivos alterados:\\n'; \
+            const octokit = getOctokit(process.env.GITHUB_TOKEN); \
+            octokit.pulls.listFiles({ owner: context.repo.owner, repo: context.repo.repo, pull_number: issueNumber, }) \
+            .then(({ data: files }) => { \
+              let comment = commentBase; \
+              if (!files || files.length === 0) { \
+                comment += 'Nenhum arquivo alterado.\\n'; \
+              } else { \
+                files.forEach(file => { \
+                  const filePatch = file.patch || 'Sem alterações'; \
+                  comment += `**${file.filename}**\\n`; \
+                  comment += '```\\n' + filePatch + '\\n```\\n\\n'; \
+                }); \
+              } \
+              const reviewComment = generateReviewText(comment); \
+              return octokit.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: issueNumber, body: reviewComment }); \
+            }).catch(error => { console.error(error); process.exit(1); });\""
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
