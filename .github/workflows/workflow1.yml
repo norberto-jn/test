@@ -25,7 +25,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const generateReviewText = require('ia-code-reviewer');
+            import generateReviewText from 'code-reviewer'
 
             const issueNumber = context.payload.pull_request.number;
             const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\n\nArquivos alterados:\n';
