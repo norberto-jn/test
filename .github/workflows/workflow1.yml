@@ -19,13 +19,13 @@ jobs:
           node-version: '14'  # ou a versão que você preferir
 
       - name: Install dependencies
-        run: npm install code-reviewer
+        run: npm install ia-code-reviewer
 
       - name: Comment on PR
         uses: actions/github-script@v6
         with:
           script: |
-            const generateReviewText = require('code-reviewer');
+            const generateReviewText = require('ia-code-reviewer');
 
             const issueNumber = context.payload.pull_request.number;
             const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\n\nArquivos alterados:\n';
