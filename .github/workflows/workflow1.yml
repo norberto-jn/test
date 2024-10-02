@@ -27,10 +27,21 @@ jobs:
               pull_number: issueNumber,
             });
 
-            const fileNames = files.map(file => file.filename).join('\n');
+            let comment = commentBase;
 
-            const comment = commentBase + fileNames;
-            
+            for (const file of files) {
+              // Obter as alterações para cada arquivo
+              const { data: fileData } = await github.rest.pulls.getFile({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: issueNumber,
+                filename: file.filename,
+              });
+
+              comment += `**${file.filename}**\n`;
+              comment += `\`\`\`\n${fileData.patch}\n\`\`\`\n\n`;
+            }
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
