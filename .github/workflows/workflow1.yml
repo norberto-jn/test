@@ -22,16 +22,15 @@ jobs:
         run: npm install ia-code-reviewer
 
       - name: Comment on PR
-        run: |
-          node -e "
-          import { context, getOctokit } from '@actions/github';
-          import generateReviewText from 'ia-code-reviewer';
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const generateReviewText = require('ia-code-reviewer');
 
-          const issueNumber = context.payload.pull_request.number;
-          const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\n\nArquivos alterados:\n';
-          const octokit = getOctokit(process.env.GITHUB_TOKEN);
+            const issueNumber = context.payload.pull_request.number;
+            const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\n\nArquivos alterados:\n';
+            const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
-          async function run() {
             const { data: files } = await octokit.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -58,10 +57,3 @@ jobs:
               issue_number: issueNumber,
               body: reviewComment,
             });
-          }
-
-          run().catch(error => {
-            console.error(error);
-            process.exit(1);
-          });
-          "
