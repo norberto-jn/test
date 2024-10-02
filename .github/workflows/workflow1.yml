@@ -29,8 +29,8 @@ jobs:
 
             const issueNumber = context.payload.pull_request.number;
             const commentBase = 'Obrigado por abrir essa Pull Request! Vamos revisar em breve.\n\nArquivos alterados:\n';
-            const octokit = github.getOctokit(process.env.GITHUB_TOKEN); // Remova essa linha
 
+            // Use github.rest para acessar a API
             const { data: files } = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
