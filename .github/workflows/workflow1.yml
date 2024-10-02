@@ -29,19 +29,22 @@ jobs:
             
             let comment = commentBase;
             
-            for (const file of files) {
-              // Obter o patch do arquivo diretamente
-              const { data: fileData } = await github.rest.pulls.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: issueNumber,
-              });
+            if (files.length === 0) {
+              comment += 'Nenhum arquivo alterado.\n';
+            } else {
+              for (const file of files) {
+                // Obter o patch do arquivo
+                const { data: fileData } = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: issueNumber,
+                });
 
-              // Aqui você deve procurar o patch do arquivo nas alterações
-              const filePatch = fileData.files.find(f => f.filename === file.filename)?.patch || 'Sem alterações';
+                const filePatch = fileData.files.find(f => f.filename === file.filename)?.patch || 'Sem alterações';
 
-              comment += `**${file.filename}**\n`;
-              comment += `\`\`\`\n${filePatch}\n\`\`\`\n\n`;
+                comment += `**${file.filename}**\n`;
+                comment += `\`\`\`\n${filePatch}\n\`\`\`\n\n`;
+              }
             }
             
             await github.rest.issues.createComment({
