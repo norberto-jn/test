@@ -55,6 +55,7 @@ jobs:
                       token
                   );
                   console.log(result);
+                  return result
             }
 
 
@@ -62,13 +63,13 @@ jobs:
             const mySecret = process.env.CHATGPT_TOKEN;
 
             // Adiciona o segredo ao comentário
-            const reviewComment = reviewText('devolva um nome de uma pessoa',mySecret)
+            const reviewComment = await reviewText('devolva um nome de uma pessoa',mySecret)
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
-              body: 'teste',
+              body: reviewComment,
             });
         env:
           CHATGPT_TOKEN : ${{ secrets.CHATGPT_TOKEN }}
