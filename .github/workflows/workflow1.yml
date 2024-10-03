@@ -50,7 +50,7 @@ jobs:
             }
 
             // Pega a variável de ambiente
-            const mySecret = process.env.TESTE;
+            const mySecret = process.env.MY_SECRET;
 
             // Adiciona o segredo ao comentário
             const reviewComment = `${comment}\n\nSegredo: ${mySecret}`
