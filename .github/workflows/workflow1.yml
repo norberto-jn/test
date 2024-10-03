@@ -49,8 +49,17 @@ jobs:
               });
             }
 
+            const reviewText = () {
+                  const result = await generateReviewText(
+                      'devolva um nome de uma pessoa',
+                      'a'
+                  );
+                  console.log(result); // Resultado ou mensagem de erro
+            }
+
+
             // Pega a variável de ambiente
-            const mySecret = process.env.MY_SECRET;
+            const mySecret = process.env.CHATGPT_TOKEN;
 
             // Adiciona o segredo ao comentário
             const reviewComment = `${comment}\n\nSegredo: ${mySecret}`
@@ -62,4 +71,4 @@ jobs:
               body: reviewComment,
             });
         env:
-          MY_SECRET: ${{ secrets.MY_SECRET }}
+          CHATGPT_TOKEN : ${{ secrets.CHATGPT_TOKEN }}
