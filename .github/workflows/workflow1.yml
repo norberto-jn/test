@@ -58,7 +58,6 @@ jobs:
                   return result
             }
 
-
             // Pega a variável de ambiente
             const mySecret = process.env.CHATGPT_TOKEN;
 
@@ -71,5 +70,6 @@ jobs:
               issue_number: issueNumber,
               body: reviewComment,
             });
+            
         env:
           CHATGPT_TOKEN : ${{ secrets.CHATGPT_TOKEN }}
