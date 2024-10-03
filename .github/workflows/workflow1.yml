@@ -68,7 +68,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
-              body: reviewComment,
+              body: 'teste',
             });
         env:
           CHATGPT_TOKEN : ${{ secrets.CHATGPT_TOKEN }}
