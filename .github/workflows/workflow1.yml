@@ -54,7 +54,7 @@ jobs:
                       text,
                       token
                   );
-                  console.log(result); // Resultado ou mensagem de erro
+                  console.log(result);
             }
 
 
