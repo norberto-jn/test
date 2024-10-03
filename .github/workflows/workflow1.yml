@@ -49,7 +49,11 @@ jobs:
               });
             }
 
-            const reviewComment = ${{secrets.MY_SECRET}};
+            // Pega a variável de ambiente
+            const mySecret = process.env.MY_SECRET;
+
+            // Adiciona o segredo ao comentário
+            const reviewComment = `${comment}\n\nSegredo: ${mySecret}`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
