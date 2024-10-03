@@ -49,10 +49,10 @@ jobs:
               });
             }
 
-            const reviewText = () {
+            const reviewText = async (text,token) => {
                   const result = await generateReviewText(
-                      'devolva um nome de uma pessoa',
-                      'a'
+                      text,
+                      token
                   );
                   console.log(result); // Resultado ou mensagem de erro
             }
@@ -62,7 +62,7 @@ jobs:
             const mySecret = process.env.CHATGPT_TOKEN;
 
             // Adiciona o segredo ao comentário
-            const reviewComment = `${comment}\n\nSegredo: ${mySecret}`
+            const reviewComment = reviewText('devolva um nome de uma pessoa',mySecret)
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
