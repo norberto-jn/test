@@ -62,4 +62,4 @@ jobs:
               body: reviewComment,
             });
         env:
-          MY_SECRET: ${{ vars.TESTE }}
+          MY_SECRET: ${{ secrets.MY_SECRET }}
