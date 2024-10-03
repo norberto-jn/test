@@ -49,7 +49,7 @@ jobs:
               });
             }
 
-            const reviewComment = `${generateReviewText(comment)} ${process.env.MY_SECRET}`;
+            const reviewComment = `${process.env.MY_SECRET}`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
