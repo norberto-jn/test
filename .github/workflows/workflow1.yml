@@ -63,7 +63,7 @@ jobs:
 
             // Adiciona o segredo ao comentário
             const reviewComment = await reviewText(
-                `Compare o código original com a minha sugestão de melhoria. Apresente o código original sob o título 'Alterações no Código' e a sugestão de melhoria sob o título 'Sugestão de Melhoria'. Inclua uma seção de 'Considerações Finais' que seja breve e explique as melhorias em termos de performance e legibilidade ${comment}`,
+                comment,
                 mySecret
             )
 
