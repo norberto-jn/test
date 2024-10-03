@@ -19,7 +19,7 @@ jobs:
           node-version: '14'  # ou a versão que você preferir
 
       - name: Teste
-        run: export MY_SECRET = ${{ secrets.MY_SECRET }}
+        run: export MY_SECRET=${{ secrets.MY_SECRET }}
 
       - name: Install dependencies
         run: npm install ia-code-reviewer
